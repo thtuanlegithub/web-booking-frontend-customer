@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
-import { FaShoppingCart } from 'react-icons/fa';
+
 function TravelCard(props) {
 	const [daysRemaining, setDaysRemaining] = useState(0);
 	useEffect(() => {

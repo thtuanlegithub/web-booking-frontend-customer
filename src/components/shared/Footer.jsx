@@ -2,7 +2,7 @@ import React from 'react';
 
 function Footer(props) {
     return (
-        <div className='container mx-auto flex flex-row mt-16'>
+        <div className='container mx-auto flex flex-row mt-16 mb-8'>
             <div className='contact flex-1 flex flex-col px-2'>
                 <div className='text-xl font-semibold mb-2'>Liên hệ</div>
                 <div className='text-sm py-1'>
