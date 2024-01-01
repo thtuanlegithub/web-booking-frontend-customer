@@ -3,7 +3,10 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { FaChevronDown } from 'react-icons/fa';
-export default function HeaderMenu() {
+export default function HeaderMenu(props) {
+    const MenuName = props.MenuName;
+    const ListItem = props.ListItem;
+
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -25,7 +28,7 @@ export default function HeaderMenu() {
                 onClick={handleClick}
                 className='!normal-case !font-semibold !text-md'
             >
-                Gói du lịch
+                {props.title}
                 <FaChevronDown className='ml-1 h-3 mt-0.5' />
             </Button>
             <Menu
