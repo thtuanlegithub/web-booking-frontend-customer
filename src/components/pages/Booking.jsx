@@ -193,7 +193,7 @@ function Booking(props) {
                 <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
                     <div className='border rounded-lg px-8 pb-8'>
                         <div className='font-bold text-lg text-center my-4'>
-                            Contact Information
+                            Thông tin liên hệ
                         </div>
                         <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
                             <TextField
