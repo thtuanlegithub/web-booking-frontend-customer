@@ -4,15 +4,28 @@ import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { fetchTravelPagination } from '../../services/travelServices';
 function FinalHourOffers(props) {
-    const [listFinalTravel, getListFinalTravel] = useState([]);
+    const [listFinalTravel, setListFinalTravel] = useState([]);
     const [listTravel, setListTravel] = useState([]);
     useEffect(() => {
         fetchListTravel();
-    }, [])
+    }, [listFinalTravel])
     const fetchListTravel = async () => {
         let res = await fetchTravelPagination(0, 0);
         if (res && res.data && res.data.EC) {
             setListTravel(res.data.DT);
+            const currentDate = new Date();
+
+            // Tính toán ngày sau 7 ngày
+            const sevenDaysLater = new Date();
+            sevenDaysLater.setDate(currentDate.getDate() + 7);
+
+            // Lọc các travel có startDateTime từ ngày hiện tại đến 7 ngày sau
+            const filteredTravels = listTravel.filter((travel) => {
+                const travelDate = new Date(travel.startDateTime);
+                return travelDate >= currentDate && travelDate <= sevenDaysLater;
+            });
+
+            setListFinalTravel(filteredTravels);
         }
     }
     return (
@@ -20,7 +33,7 @@ function FinalHourOffers(props) {
             <div className='mx-8'>
                 <div className='text-3xl font-bold'>Ưu đãi giờ chót</div>
                 <div className='mt-4 grid 2xl:grid-cols-4 xl:grid-cols-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-8 xl:gap-12 2xl:gap-24 gap-8 flex-wrap'>
-                    {listTravel.map((item) => (<TravelCard travel={item} />))}
+                    {listFinalTravel.map((item) => (<TravelCard travel={item} />))}
                 </div>
             </div>
             <Link to='/search'
