@@ -85,7 +85,10 @@ function Payment(props) {
                                 <div className='font-bold inline ml-2'>{selectedBooking.Travel.remainTicket}</div>
                             </div>
                             <div className='text-xl font-bold mt-2 text-red-500 ml-2'>{formatCurrency(selectedBooking.Travel.travelPrice)} đ</div>
-                            <div className='absolute right-3 bottom-3 font-bold text-sm bg-yellow-400 rounded-lg p-2'>Giảm giá {selectedBooking.Travel.Discount.discountAmount}%</div>
+                            {
+                                selectedBooking.Travel.Discount && selectedBooking.Travel.discountAmount &&
+                                <div className='absolute right-3 bottom-3 font-bold text-sm bg-yellow-400 rounded-lg p-2'>Giảm giá {selectedBooking.Travel.Discount.discountAmount}%</div>
+                            }
                         </div>
                     </>
                 }

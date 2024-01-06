@@ -8,6 +8,7 @@ import { Button } from '@mui/material';
 import { FaShoppingCart } from 'react-icons/fa';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { isValidGmail } from '../../utils/isValidGmail';
 function Booking(props) {
     let navigate = useNavigate();
     const [selectedTravel, setSelectedTravel] = useState(null);
@@ -29,19 +30,30 @@ function Booking(props) {
                 return newList.slice(0, newNumberOfTourist);
             });
         }
-        else if (isNaN(newNumberOfTourist)) {
-            alert(`Số hành khách phải nhỏ hơn hoặc bằng số chỗ còn nhận: ${selectedTravel.remainTicket} và lớn hơn 0`);
+        else if (newNumberOfTourist > 0) {
+            setSnackbarMessage(`Số hành khách phải nhỏ hơn hoặc bằng số chỗ còn nhận: ${selectedTravel.remainTicket}`);
+            setOpenSnackbar(true);
+        }
+        else {
+            setSnackbarMessage("Số hành khách phải là số và lớn hơn 0");
+            setOpenSnackbar(true);
         }
     };
 
     const handleTouristChange = (event, index) => {
-        const newTouristName = event.target.value;
+        if (event.target.value.length > 30) {
+            setSnackbarMessage('Tên tối đa 30 kí tự')
+            setOpenSnackbar(true);
+        }
+        else {
+            const newTouristName = event.target.value;
 
-        setTouristList((prevList) => {
-            const newList = [...prevList];
-            newList[index] = newTouristName;
-            return newList;
-        });
+            setTouristList((prevList) => {
+                const newList = [...prevList];
+                newList[index] = newTouristName;
+                return newList;
+            });
+        }
     };
 
     useEffect(() => {
@@ -71,24 +83,33 @@ function Booking(props) {
     const validateInput = () => {
         let invalidInput = false;
         if (customerPhone == '' || customerPhone == null) {
-            setSnackbarMessage('Customer phone number has to be filled');
+            setSnackbarMessage('Vui lòng nhập số điện thoại');
             setOpenSnackbar(true);
             return false;
         }
         if (customerName == '' || customerName == null) {
-            setSnackbarMessage('Customer name has to be filled');
+            setSnackbarMessage('Vui lòng nhập họ tên trong thông tin liên hệ');
             setOpenSnackbar(true);
             return false;
         }
         if (customerGmail == '' || customerGmail == null) {
-            setSnackbarMessage('Customer gmail has to be filled');
+            setSnackbarMessage('Vui lòng nhập gmail');
             setOpenSnackbar(true);
             return false;
         }
-        let touristInvalid = true;
+        if (!isValidGmail(customerGmail)) {
+            setSnackbarMessage('Vui lòng nhập gmail hợp lệ');
+            setOpenSnackbar(true);
+            return false;
+        }
+        if (numberOfTourist < 1) {
+            setSnackbarMessage('Số hành khách phải lớn hơn 0');
+            setOpenSnackbar(true);
+            return false;
+        }
         touristList.forEach((touristItem, touristIndex) => {
             if (touristItem == '') {
-                setSnackbarMessage(`Tourist ${touristIndex} has to be filled`);
+                setSnackbarMessage(`Vui lòng nhập tên hành khách thứ ${touristIndex + 1}`);
                 setOpenSnackbar(true);
                 invalidInput = true;
                 return false;
@@ -104,13 +125,25 @@ function Booking(props) {
     const [customerPhone, setCustomerPhone] = useState('');
     const [customerGmail, setCustomerGmail] = useState('');
     const handleCustomerPhoneChange = (event) => {
-        setCustomerPhone(event.target.value);
+        if (isNaN(event.target.value)) {
+            setSnackbarMessage('Vui lòng nhập số điện thoại hợp lệ')
+            setOpenSnackbar(true);
+        }
+        else {
+            setCustomerPhone(event.target.value);
+        }
     }
     const handleCustomerGmailChange = (event) => {
         setCustomerGmail(event.target.value);
     }
     const handleCustomerNameChange = (event) => {
-        setCustomerName(event.target.value);
+        if (event.target.value.length > 30) {
+            setSnackbarMessage('Tên tối đa 30 kí tự')
+            setOpenSnackbar(true);
+        }
+        else {
+            setCustomerName(event.target.value);
+        }
     }
     const handleCreateBooking = async () => {
         if (validateInput()) {
@@ -134,10 +167,11 @@ function Booking(props) {
             let res = await createBooking(bookingData);
             if (res && res.data && res.data.EC === '0') {
                 console.log(res.data.DT);
-                let booking = res.data.DT;
-                localStorage.setItem('bookingId', booking.id);
-                alert("Booking successfully!");
-                navigate('/payment');
+                if (res.data.DT && res.data.DT.id) {
+                    localStorage.setItem('bookingId', res.data.DT.id);
+                    alert("Đặt vé thành công!");
+                    navigate('/payment');
+                }
             }
         }
     }
@@ -184,7 +218,10 @@ function Booking(props) {
                                     <div className='font-bold inline ml-2'>{selectedTravel.remainTicket}</div>
                                 </div>
                                 <div className='text-xl font-bold mt-2 text-red-500 ml-2'>{formatCurrency(selectedTravel.travelPrice)} đ</div>
-                                <div className='absolute right-3 bottom-3 font-bold text-sm bg-yellow-400 rounded-lg p-2'>Giảm giá {selectedTravel.Discount.discountAmount}%</div>
+                                {
+                                    selectedTravel.Discount &&
+                                    <div className='absolute right-3 bottom-3 font-bold text-sm bg-yellow-400 rounded-lg p-2'>Giảm giá {selectedTravel.Discount.discountAmount}%</div>
+                                }
                             </div>
                         </>
                     }

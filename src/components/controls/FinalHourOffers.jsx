@@ -8,7 +8,7 @@ function FinalHourOffers(props) {
     const [listTravel, setListTravel] = useState([]);
     useEffect(() => {
         fetchListTravel();
-    }, [listFinalTravel])
+    }, [])
     const fetchListTravel = async () => {
         let res = await fetchTravelPagination(0, 0);
         if (res && res.data && res.data.EC) {
@@ -20,9 +20,10 @@ function FinalHourOffers(props) {
             sevenDaysLater.setDate(currentDate.getDate() + 7);
 
             // Lọc các travel có startDateTime từ ngày hiện tại đến 7 ngày sau
-            const filteredTravels = listTravel.filter((travel) => {
+            const filteredTravels = res.data.DT.filter((travel) => {
                 const travelDate = new Date(travel.startDateTime);
-                return travelDate >= currentDate && travelDate <= sevenDaysLater;
+                const travelRemainTicket = travel.remainTicket;
+                return travelDate >= currentDate && travelDate <= sevenDaysLater && travelRemainTicket > 0;
             });
 
             setListFinalTravel(filteredTravels);

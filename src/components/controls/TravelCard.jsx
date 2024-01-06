@@ -40,6 +40,10 @@ function TravelCard(props) {
 					</div>
 					<div className='text-md font-regular mt-2'>Nơi khởi hành: {props.travel.startLocation}</div>
 					<div className='mt-2'>
+						<div className='text-md font-regular mt-1 inline'>Số ngày: </div>
+						<div className='text-md font-regular mt-1 inline font-bold'>{props.travel.Tour.totalDay}</div>
+					</div>
+					<div className='mt-2'>
 						<div className='text-md font-regular mt-1 inline'>Giá: </div>
 						<div className='text-md font-regular mt-1 inline line-through'>{formatCurrency(props.travel.Tour.tourPrice)} đ</div>
 					</div>
