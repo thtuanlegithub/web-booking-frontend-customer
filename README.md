@@ -24,16 +24,13 @@ Welcome to the Customer Side module of our web application! This section is dedi
 
 - **Frontend:**
   - HTML5, CSS3, JavaScript
-  - Framework (e.g., React, Angular, or Vue.js)
-  - UI Library (e.g., Bootstrap, Material-UI)
+  - Framework React
+  - UI Library TailwindCSS, Material-UI
 
 - **Backend:**
-  - Server-side language (e.g., Node.js, Python, Ruby)
-  - Web framework (e.g., Express, Django, Ruby on Rails)
-  - Database (e.g., MongoDB, MySQL, PostgreSQL)
-
-- **Payment Integration:**
-  - Integration with a payment gateway for secure and convenient online payments.
+  - Server-side language Node.js
+  - Web framework ExpressJS
+  - Database MySQL
 
 ## User Interface
 ![Home Page](./public/ui1.png)
